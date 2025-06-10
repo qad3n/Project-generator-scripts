@@ -40,7 +40,7 @@ while (( $# )); do
 	case "$1" in
 		-n|--name) [[ $# -ge 2 ]] || usage; projectName=$(sanitizeName "$2"); shift 2;;
 		-l|--lang) [[ $# -ge 2 ]] || usage; lang="${2,,}"; shift 2;;
-		-y|--yes)  autoYes=true; shift;;
+		-y|--noconfirm) autoYes=true; shift;;
 		-h|--help) usage;;
 		*) error "Unknown option: $1";;
 	esac
