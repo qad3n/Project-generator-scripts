@@ -55,16 +55,23 @@ while [[ -z $projectName ]]; do
 done
 
 # language prompt
-while :; do
-	echo -e "Supported languages:\n- c\n- cpp\n- asm"
-	read -rp "Enter language (c/cpp/asm) or 'exit': " lang
-	lang="${lang,,}"
+if [[ -z $lang ]]; then
+	while :; do
+		echo -e "Supported languages:\n- c\n- cpp\n- asm"
+		read -rp "Enter language (c/cpp/asm) or 'exit': " lang
+		lang="${lang,,}"
+		case "$lang" in
+			c|cpp|asm) break ;;
+			exit|quit) log "Exiting."; exit ;;
+			*) warn "Unsupported '$lang'." ;;
+		esac
+	done
+else
 	case "$lang" in
-		c|cpp|asm) break ;;
-		exit|quit) log "Exiting."; exit ;;
-		*) warn "Unsupported '$lang'." ;;
+		c|cpp|asm) ;;  # valid, continue
+		*) error "Unsupported language '$lang'" ;;
 	esac
-done
+fi
 
 # requirement check
 case "$lang" in
