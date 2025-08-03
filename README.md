@@ -1,6 +1,6 @@
 # Project generator shell scripts written in bash
 
-Scripts that I use to generate my projects. They automatically do the tedious stuff for me.
+Scripts that I use to generate my projects. They automatically do the tedious stuff for me
 
 ### Post script execution instructions for git / GitHub (optional)
 
