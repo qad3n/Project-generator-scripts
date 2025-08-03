@@ -194,6 +194,7 @@ chmod +x build
 
 log "Invoking initial build..."
 ./build
+./"$projectName"
 
 trap - ERR
 log "Setup complete. Binary: out/$projectName"
