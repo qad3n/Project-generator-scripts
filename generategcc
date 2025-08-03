@@ -19,18 +19,18 @@ autoYes=false
 cxxStandard=17
 asmCompiler=nasm
 
-sanitizeName() { local n="${1// /_}"; echo "${n//[^A-Za-z0-9_-]/}"; } # probably a simpler way of doing this
-getCores() { [[ $(uname -s) == Darwin* ]] && sysctl -n hw.logicalcpu || nproc; } # no mac, dont care to test. dont use mac.
+sanitizeName() { local n="${1// /_}"; echo "${n//[^A-Za-z0-9_-]/}"; }
+getCores() { [[ $(uname -s) == Darwin* ]] && sysctl -n hw.logicalcpu || nproc; } # testing
 
 # usage help
 usage() 
 {
 	cat <<EOF
 	Usage: $0 [options]
-		-n | --name <project>   Project name
-		-l | --lang <language>  Language: c / cpp / asm
-		-y | --yes              Skip confirmation
-		-h | --help             Show this help
+		-n | --name <project>	Project name
+		-l | --lang <language> 	Language: c / cpp / asm
+		-y | --yes				Skip confirmation
+		-h | --help				Show this help
 EOF
 	exit 1
 }
@@ -68,7 +68,7 @@ if [[ -z $lang ]]; then
 	done
 else
 	case "$lang" in
-		c|cpp|asm) ;;  # valid, continue
+		c|cpp|asm) ;;
 		*) error "Unsupported language '$lang'" ;;
 	esac
 fi
@@ -109,7 +109,7 @@ EOF
 int main(){ std::cout<<"Hello, C++ World!\n"; return 0; }
 EOF
 	;;
-	asm) cat >"$srcFile" <<'EOF' # pasted
+	asm) cat >"$srcFile" <<'EOF' # pasted asm example
 global _start
 section .data
 	msg db "Hello, ASM World!",0x0A
@@ -142,25 +142,16 @@ add_compile_options(
 	-pedantic -fstack-protector-strong
 )
 
+include_directories(include)
+
 file(GLOB_RECURSE PROJECT_SOURCES CONFIGURE_DEPENDS
-	src/*.__EXT__
+	src/*.c
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
 
-target_include_directories(${PROJECT_NAME}
-	PRIVATE ${CMAKE_SOURCE_DIR}/src
-)
-
 set_target_properties(${PROJECT_NAME} PROPERTIES
-	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/out"
-)
-
-add_custom_target(run
-	COMMAND "${CMAKE_SOURCE_DIR}/out/${PROJECT_NAME}"
-	DEPENDS ${PROJECT_NAME}
-	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-	COMMENT "Running ${PROJECT_NAME}"
+	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}"
 )
 CMAKE_EOF
 
